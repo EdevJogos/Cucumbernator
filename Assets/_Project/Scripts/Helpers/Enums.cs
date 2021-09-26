@@ -70,6 +70,7 @@ public enum Prefabs
 {
     LASER,
     STAR,
+    STAR_SMALL,
     CUCUMBER,
     LASER_IMPACT,
     POINTS,

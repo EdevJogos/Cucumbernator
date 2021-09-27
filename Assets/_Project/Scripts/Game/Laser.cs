@@ -24,7 +24,7 @@ public class Laser : MonoBehaviour
     {
         if (GameCEO.State == GameState.GAME_OVER)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -32,7 +32,7 @@ public class Laser : MonoBehaviour
     {
         if (!CameraManager.InsideCamera(transform.position))
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         if (GameCEO.State != GameState.PLAY)
@@ -44,16 +44,22 @@ public class Laser : MonoBehaviour
         }
     }
 
-    public void Initialize(float p_speed)
+    public void Initialize(Vector3 p_position, Quaternion p_rotation, float p_speed)
     {
+        _destroying = false;
         _speed = p_speed;
+
+        transform.position = p_position;
+        transform.rotation = p_rotation;
+        gameObject.SetActive(true);
+
         _rigidbody2D.velocity = transform.right * _speed;
     }
 
     public void RequestDestroy()
     {
         PrefabsDatabase.InstantiatePrefab(Prefabs.LASER_IMPACT, 0, impactPoint.position, Quaternion.identity);
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D p_other)
@@ -71,7 +77,10 @@ public class Laser : MonoBehaviour
                 ScoreManager.UpdateScore(100);
                 RequestDestroy();
             }
-            else Destroy(gameObject);
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
         else if(p_other.tag == "IceCream")
         {
@@ -86,7 +95,10 @@ public class Laser : MonoBehaviour
                 ScoreManager.UpdateScore(100);
                 RequestDestroy();
             }
-            else Destroy(gameObject);
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

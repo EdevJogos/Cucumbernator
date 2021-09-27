@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static PoolDatabase;
 
 public class StageManager : MonoBehaviour
 {
@@ -11,7 +12,12 @@ public class StageManager : MonoBehaviour
     [SerializeField] private int _scoreTarget = 0;
     [SerializeField] private int _scoreMark = 500;
     private float _spawnTimer;
-    
+
+    private void Start()
+    {
+        CreatePool(Prefabs.CUCUMBER, 5);
+    }
+
     private void Update()
     {
         if (GameCEO.State != GameState.PLAY)
@@ -44,15 +50,15 @@ public class StageManager : MonoBehaviour
 
         for (int __i = 0; __i < __total; __i++)
         {
-            Cucumber __cucumber = PrefabsDatabase.InstantiatePrefab<Cucumber>(Prefabs.CUCUMBER, 0, CameraManager.RandomRight(0.85f), Quaternion.identity);
-
-            if(HighRatio >= 1f)
+            Cucumber __cucumber = GetPooledObject<Cucumber>(Prefabs.CUCUMBER);
+            
+            if (HighRatio >= 1f)
             {
-                __cucumber.Initialize(Random.Range(1f, HighRatio));
+                __cucumber.Initialize(CameraManager.RandomRight(0.85f), Random.Range(1f, HighRatio));
             }
             else
             {
-                __cucumber.Initialize(Random.Range(HighRatio, 1f));
+                __cucumber.Initialize(CameraManager.RandomRight(0.85f), Random.Range(HighRatio, 1f));
             }
         }
     }

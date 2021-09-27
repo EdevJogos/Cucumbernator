@@ -20,7 +20,7 @@ public class DestroyOnGameOver : MonoBehaviour
         {
             if(destroyImmediately)
             {
-                Destroy(gameObject);
+                GetComponent<IDestructable>().DestroyImmediately();
             }
             else
             {

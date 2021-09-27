@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using static PrefabsDatabase;
+using static PoolDatabase;
 
 public class Player : Agent
 {
@@ -36,6 +37,11 @@ public class Player : Agent
         {
             StopWaveDisk();
         }
+    }
+
+    private void Start()
+    {
+        CreatePool(Prefabs.LASER, 8);
     }
 
     private void Update()
@@ -84,8 +90,11 @@ public class Player : Agent
         rightEye.right = __rightDirection;
         leftEye.right = __leftDirection;
 
-        InstantiatePrefab<Laser>(Prefabs.LASER, 0, rightPoint.position, rightEye.rotation).Initialize(20f);
-        InstantiatePrefab<Laser>(Prefabs.LASER, 0, leftPoint.position, leftEye.rotation).Initialize(20f);
+        GetPooledObject<Laser>(Prefabs.LASER).Initialize(rightPoint.position, rightEye.rotation, 20f);
+        GetPooledObject<Laser>(Prefabs.LASER).Initialize(leftPoint.position, leftEye.rotation, 20f);
+
+        //InstantiatePrefab<Laser>(Prefabs.LASER, 0, rightPoint.position, rightEye.rotation).Initialize(20f);
+        //InstantiatePrefab<Laser>(Prefabs.LASER, 0, leftPoint.position, leftEye.rotation).Initialize(20f);
 
         GetComponent<Animator>().SetTrigger("Muzzle");
         UpdateExhaustion(0.2f);
